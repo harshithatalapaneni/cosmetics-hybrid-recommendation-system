@@ -18,9 +18,9 @@ GlowGuide is a **web-based cosmetics recommendation system** built with **Python
 
 ## Tech Stack
 
-**Backend:** Python, Flask
-**Frontend:** HTML5, CSS3, JavaScript
-**Machine Learning & Data Processing:** Scikit-learn, Pandas, NumPy, NLTK, SpaCy, Joblib
+* **Backend:** Python, Flask
+* **Frontend:** HTML5, CSS3, JavaScript
+* **Machine Learning & Data Processing:** Scikit-learn, Pandas, NumPy, NLTK, SpaCy, Joblib
 
 
 
