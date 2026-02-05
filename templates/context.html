@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather-Aware Skincare Recommendations</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #87CEEB 0%, #4682B4 50%, #1E90FF 100%);
+            transition: background 1.5s ease;
+            color: white;
+            overflow: hidden;
+            padding: 20px;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(15px);
+            padding: 40px 35px;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            max-width: 500px;
+            width: 100%;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+            z-index: -1;
+            border-radius: 20px;
+        }
+
+        h2 {
+            margin-bottom: 12px;
+            font-size: 2em;
+            font-weight: 700;
+            color: white;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .subtitle {
+            font-size: 1.1em;
+            margin-bottom: 30px;
+            opacity: 0.95;
+            line-height: 1.5;
+            color: white;
+        }
+
+        .weather-card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 25px 20px;
+            border-radius: 15px;
+            margin: 25px 0;
+            display: none;
+            position: relative;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .weather-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.3));
+        }
+
+        .weather-card.visible {
+            display: block;
+            animation: fadeInUp 0.8s ease;
+        }
+
+        .weather-icon {
+            font-size: 4em;
+            margin-bottom: 15px;
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+        }
+
+        .weather-description {
+            font-size: 1.3em;
+            margin-bottom: 20px;
+            font-weight: 600;
+            color: white;
+            text-shadow: 0 1px 5px rgba(0, 0, 0, 0.3);
+        }
+
+        .weather-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 15px;
+        }
+
+        .weather-item {
+            text-align: center;
+            padding: 15px 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .weather-label {
+            font-size: 0.85em;
+            opacity: 0.8;
+            margin-bottom: 8px;
+            color: white;
+            font-weight: 500;
+        }
+
+        .weather-value {
+            font-size: 1.1em;
+            font-weight: bold;
+            color: white;
+        }
+
+        .form-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 25px;
+        }
+
+        button {
+            padding: 16px 30px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 150px;
+            position: relative;
+            overflow: hidden;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-yes {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .btn-no {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            background: rgba(255, 255, 255, 0.25);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+
+        .loading {
+            display: none;
+            margin: 25px 0;
+        }
+
+        .loading.visible {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .spinner {
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top: 3px solid rgba(255, 255, 255, 0.8);
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+
+        .loading-text {
+            font-size: 1em;
+            opacity: 0.9;
+            color: white;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .weather-clear { background: linear-gradient(135deg, #87CEEB 0%, #4682B4 50%, #1E90FF 100%); }
+        .weather-cloudy { background: linear-gradient(135deg, #B0C4DE 0%, #778899 50%, #708090 100%); }
+        .weather-rain { background: linear-gradient(135deg, #4682B4 0%, #4169E1 50%, #000080 100%); }
+        .weather-snow { background: linear-gradient(135deg, #F0F8FF 0%, #E6E6FA 50%, #D8BFD8 100%); color: #2c3e50; }
+        .weather-thunderstorm { background: linear-gradient(135deg, #2F4F4F 0%, #696969 50%, #808080 100%); }
+        .weather-fog { background: linear-gradient(135deg, #D3D3D3 0%, #C0C0C0 50%, #A9A9A9 100%); color: #2c3e50; }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 30px 25px;
+                max-width: 400px;
+            }
+            
+            h2 {
+                font-size: 1.7em;
+            }
+            
+            .form-buttons {
+                flex-direction: column;
+                gap: 12px;
+            }
+            
+            button {
+                width: 100%;
+                min-width: auto;
+                padding: 14px 25px;
+            }
+            
+            .weather-details {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+            
+            .weather-icon {
+                font-size: 3.5em;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .container {
+                padding: 25px 20px;
+            }
+            
+            h2 {
+                font-size: 1.5em;
+            }
+            
+            .subtitle {
+                font-size: 1em;
+                margin-bottom: 25px;
+            }
+        }
+    </style>
+</head>
+<body class="weather-clear">
+    <div class="container">
+        <h2>Weather-Aware Skincare</h2>
+        <p class="subtitle">Get personalized skincare recommendations based on your current weather conditions</p>
+        
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p class="loading-text">Detecting your location and weather...</p>
+        </div>
+
+        <div class="weather-card" id="weatherInfo">
+            <div class="weather-icon" id="weatherIcon">🌤️</div>
+            <h3 class="weather-description" id="weatherDescription">Weather Detected</h3>
+            <div class="weather-details">
+                <div class="weather-item">
+                    <div class="weather-label">Location</div>
+                    <div class="weather-value" id="locationValue">Loading...</div>
+                </div>
+                <div class="weather-item">
+                    <div class="weather-label">Temperature</div>
+                    <div class="weather-value" id="tempValue">Loading...</div>
+                </div>
+                <div class="weather-item">
+                    <div class="weather-label">Conditions</div>
+                    <div class="weather-value" id="weatherValue">Loading...</div>
+                </div>
+                <div class="weather-item">
+                    <div class="weather-label">Coordinates</div>
+                    <div class="weather-value" id="coordsValue">Loading...</div>
+                </div>
+            </div>
+        </div>
+
+        <form action="{{ url_for('recommendation') }}" method="post" id="recommendationForm">
+    <input type="hidden" name="skin_type" value="{{ skin_type }}">
+    <input type="hidden" name="budget" value="{{ budget }}">
+    <input type="hidden" name="main_category" value="{{ main_category }}">
+    <input type="hidden" name="sub_category" value="{{ sub_category }}">
+    <input type="hidden" name="brand" value="{{ brand }}">
+    <input type="hidden" name="lat" id="lat">
+    <input type="hidden" name="lon" id="lon">
+    <input type="hidden" name="weather" id="weather">
+    <input type="hidden" name="temperature" id="temperature">
+    
+    {% for product_id in liked_products %}
+    <input type="hidden" name="liked_products" value="{{ product_id }}">
+    {% endfor %}
+    
+    <div class="form-buttons">
+        <button type="submit" name="context" value="yes" class="btn-yes" id="yesBtn">
+            Use Weather Context
+        </button>
+        <button type="submit" name="context" value="no" class="btn-no">
+            Skip Context
+        </button>
+    </div>
+</form>
+    </div>
+
+    <script>
+        let detectedWeather = '';
+        let detectedTemperature = '';
+
+        const weatherIcons = {
+            'Clear': '☀️',
+            'Mainly Clear': '☀️',
+            'Partly Cloudy': '🌤️',
+            'Overcast': '☁️',
+            'Fog': '🌫️',
+            'Depositing Rime Fog': '🌫️',
+            'Drizzle Light': '🌧️',
+            'Drizzle Moderate': '🌧️',
+            'Drizzle Dense': '🌧️',
+            'Rain Slight': '🌧️',
+            'Rain Moderate': '🌧️',
+            'Rain Heavy': '🌧️',
+            'Snow Slight': '❄️',
+            'Snow Moderate': '❄️',
+            'Snow Heavy': '❄️',
+            'Thunderstorm': '⛈️',
+            'Unknown': '🌤️'
+        };
+
+        const weatherBackgrounds = {
+            'Clear': 'weather-clear',
+            'Mainly Clear': 'weather-clear',
+            'Partly Cloudy': 'weather-clear',
+            'Overcast': 'weather-cloudy',
+            'Fog': 'weather-fog',
+            'Depositing Rime Fog': 'weather-fog',
+            'Drizzle Light': 'weather-rain',
+            'Drizzle Moderate': 'weather-rain',
+            'Drizzle Dense': 'weather-rain',
+            'Rain Slight': 'weather-rain',
+            'Rain Moderate': 'weather-rain',
+            'Rain Heavy': 'weather-rain',
+            'Snow Slight': 'weather-snow',
+            'Snow Moderate': 'weather-snow',
+            'Snow Heavy': 'weather-snow',
+            'Thunderstorm': 'weather-thunderstorm',
+            'Unknown': 'weather-clear'
+        };
+
+        async function setLocationAndWeather() {
+            const loading = document.getElementById('loading');
+            const weatherInfo = document.getElementById('weatherInfo');
+            const yesBtn = document.getElementById('yesBtn');
+            
+            loading.classList.add('visible');
+
+            try {
+                if (navigator.geolocation) {
+                    const position = await new Promise((resolve, reject) => {
+                        navigator.geolocation.getCurrentPosition(resolve, reject);
+                    });
+
+                    const lat = position.coords.latitude;
+                    const lon = position.coords.longitude;
+                    
+                    document.getElementById("lat").value = lat;
+                    document.getElementById("lon").value = lon;
+
+                    const weatherResponse = await fetch('/get-weather-data', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ lat, lon })
+                    });
+
+                    if (weatherResponse.ok) {
+                        const weatherData = await weatherResponse.json();
+                        
+                        detectedWeather = weatherData.weather || 'Unknown';
+                        detectedTemperature = weatherData.temperature || 'N/A';
+                        
+                        document.getElementById("weather").value = detectedWeather;
+                        document.getElementById("temperature").value = detectedTemperature;
+
+                        updateWeatherUI(lat, lon, detectedWeather, detectedTemperature);
+                        
+                    } else {
+                        throw new Error('Weather data not available');
+                    }
+
+                } else {
+                    throw new Error('Geolocation not supported');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById("weatherInfo").innerHTML = `
+                    <div style="text-align: center; padding: 20px;">
+                        <div style="font-size: 2.5em; margin-bottom: 10px;">📍</div>
+                        <h3 style="margin-bottom: 10px; color: #fff;">Location Access Required</h3>
+                        <p style="color: white; opacity: 0.9;">Please enable location access for weather-aware recommendations</p>
+                    </div>
+                `;
+                weatherInfo.classList.add('visible');
+                yesBtn.disabled = true;
+                yesBtn.innerHTML = 'Enable Location First';
+                yesBtn.style.opacity = '0.6';
+            } finally {
+                loading.classList.remove('visible');
+                weatherInfo.classList.add('visible');
+            }
+        }
+
+        function updateWeatherUI(lat, lon, weather, temperature) {
+            const weatherIcon = document.getElementById('weatherIcon');
+            const weatherDescription = document.getElementById('weatherDescription');
+            const locationValue = document.getElementById('locationValue');
+            const tempValue = document.getElementById('tempValue');
+            const weatherValue = document.getElementById('weatherValue');
+            const coordsValue = document.getElementById('coordsValue');
+
+            weatherIcon.textContent = weatherIcons[weather] || weatherIcons.Unknown;
+            
+            weatherDescription.textContent = `${weather} Conditions`;
+
+            locationValue.textContent = getApproximateLocation(lat, lon);
+            tempValue.textContent = `${temperature}°C`;
+            weatherValue.textContent = weather;
+            coordsValue.textContent = `${lat.toFixed(4)}, ${lon.toFixed(4)}`;
+
+            updateBackground(weather);
+        }
+
+        function getApproximateLocation(lat, lon) {
+            if (lat >= 40.7 && lat <= 40.8 && lon >= -74.0 && lon <= -73.9) return 'New York, NY';
+            if (lat >= 34.0 && lat <= 34.1 && lon >= -118.3 && lon <= -118.2) return 'Los Angeles, CA';
+            if (lat >= 41.8 && lat <= 41.9 && lon >= -87.7 && lon <= -87.6) return 'Chicago, IL';
+            if (lat >= 29.7 && lat <= 29.8 && lon >= -95.4 && lon <= -95.3) return 'Houston, TX';
+            if (lat >= 51.5 && lat <= 51.6 && lon >= -0.2 && lon <= -0.1) return 'London, UK';
+            return 'VIT Chennai';
+        }
+
+        function updateBackground(weather) {
+            const body = document.body;
+            body.className = body.className.replace(/weather-\w+/g, '');
+            body.classList.add(weatherBackgrounds[weather] || 'weather-clear');
+        }
+
+        window.onload = setLocationAndWeather;
+    </script>
+</body>
+</html>

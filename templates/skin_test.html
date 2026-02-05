@@ -1,0 +1,762 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skin Type Test Instructions | GlowGuide</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #fdfcfb 0%, #f5e3e6 50%, #e2f0fb 100%);
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 10% 20%, rgba(255, 215, 0, 0.08) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(255, 107, 107, 0.08) 0%, transparent 40%),
+                radial-gradient(circle at 50% 50%, rgba(77, 171, 247, 0.06) 0%, transparent 50%);
+            animation: shimmer 12s ease-in-out infinite;
+            z-index: 1;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            position: relative;
+            z-index: 2;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+            width: 100%;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 25px;
+        }
+
+        .logo i {
+            font-size: 3.2rem;
+            color: #e83e8c;
+            margin-right: 18px;
+            text-shadow: 0 0 25px rgba(232, 62, 140, 0.6);
+            animation: glow 3s ease-in-out infinite alternate;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.1));
+        }
+
+        .logo h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            background: linear-gradient(45deg, #e83e8c, #6a11cb, #2575fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            letter-spacing: 1.2px;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.05));
+        }
+
+        .page-title {
+            font-size: 3rem;
+            margin: 30px 0 20px;
+            font-weight: 700;
+            position: relative;
+            display: inline-block;
+            background: linear-gradient(45deg, #2c3e50, #e83e8c, #3498db);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+        }
+
+        .page-title::after {
+            content: '';
+            position: absolute;
+            width: 70%;
+            height: 5px;
+            background: linear-gradient(90deg, transparent, #e83e8c, #6a11cb, transparent);
+            bottom: -18px;
+            left: 15%;
+            border-radius: 3px;
+            animation: lineGlow 4s ease-in-out infinite;
+            box-shadow: 0 2px 10px rgba(232, 62, 140, 0.3);
+        }
+
+        .subtitle {
+            font-size: 1.4rem;
+            color: #666;
+            max-width: 700px;
+            margin: 30px auto 0;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.05);
+            line-height: 1.7;
+            font-weight: 500;
+        }
+
+        .instructions-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            width: 100%;
+            max-width: 1100px;
+            margin: 40px 0;
+        }
+
+        .steps-section {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(25px);
+            border-radius: 25px;
+            padding: 40px;
+            box-shadow: 
+                0 20px 40px rgba(0,0,0,0.08),
+                0 8px 25px rgba(232, 62, 140, 0.15),
+                inset 0 1px 0 rgba(255,255,255,0.8);
+            border: 2px solid rgba(232, 62, 140, 0.1);
+        }
+
+        .steps-section h3 {
+            font-size: 2rem;
+            margin-bottom: 30px;
+            color: #2c3e50;
+            text-align: center;
+            background: linear-gradient(45deg, #e83e8c, #6a11cb);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 700;
+        }
+
+        .steps-list {
+            list-style: none;
+            counter-reset: step-counter;
+        }
+
+        .step-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .step-item::before {
+            counter-increment: step-counter;
+            content: counter(step-counter);
+            background: linear-gradient(135deg, #e83e8c, #6a11cb);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-right: 20px;
+            flex-shrink: 0;
+            box-shadow: 0 4px 10px rgba(232, 62, 140, 0.3);
+        }
+
+        .step-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        .step-content h4 {
+            font-size: 1.3rem;
+            margin-bottom: 8px;
+            color: #2c3e50;
+            font-weight: 600;
+        }
+
+        .step-content p {
+            color: #666;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        .visual-section {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(25px);
+            border-radius: 25px;
+            padding: 40px;
+            box-shadow: 
+                0 20px 40px rgba(0,0,0,0.08),
+                0 8px 25px rgba(232, 62, 140, 0.15),
+                inset 0 1px 0 rgba(255,255,255,0.8);
+            border: 2px solid rgba(232, 62, 140, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .visual-section h3 {
+            font-size: 2rem;
+            margin-bottom: 30px;
+            color: #2c3e50;
+            text-align: center;
+            background: linear-gradient(45deg, #e83e8c, #6a11cb);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 700;
+        }
+
+        .skin-visual {
+            width: 100%;
+            max-width: 400px;
+            height: 300px;
+            background: linear-gradient(135deg, #fff9c4, #ffecb3);
+            border-radius: 20px;
+            margin-bottom: 25px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .face-diagram {
+            width: 180px;
+            height: 220px;
+            position: relative;
+        }
+
+        .face-outline {
+            width: 100%;
+            height: 100%;
+            background: #ffebee;
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            position: relative;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.1);
+            border: 3px solid #f8bbd0;
+        }
+
+        .t-zone {
+            position: absolute;
+            top: 20%;
+            left: 25%;
+            width: 50%;
+            height: 40%;
+            background: linear-gradient(135deg, rgba(255, 235, 59, 0.6), rgba(255, 193, 7, 0.6));
+            border-radius: 30% 30% 40% 40%;
+            animation: zonePulse 3s ease-in-out infinite;
+        }
+
+        .cheeks {
+            position: absolute;
+            top: 40%;
+            width: 100%;
+            height: 40%;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .cheek-left, .cheek-right {
+            width: 30%;
+            height: 60%;
+            background: linear-gradient(135deg, rgba(129, 212, 250, 0.6), rgba(33, 150, 243, 0.6));
+            border-radius: 50%;
+            animation: zonePulse 3s ease-in-out infinite reverse;
+        }
+
+        .cheek-left {
+            margin-left: 5%;
+        }
+
+        .cheek-right {
+            margin-right: 5%;
+        }
+
+        .jawline {
+            position: absolute;
+            bottom: 10%;
+            left: 20%;
+            width: 60%;
+            height: 20%;
+            background: linear-gradient(135deg, rgba(165, 214, 167, 0.6), rgba(76, 175, 80, 0.6));
+            border-radius: 40% 40% 50% 50%;
+            animation: zonePulse 3s ease-in-out infinite;
+            animation-delay: 1s;
+        }
+
+        .zone-labels {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .zone-label {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            color: #333;
+        }
+
+        .label-tzone {
+            top: 25%;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #f57f17;
+        }
+
+        .label-left-cheek {
+            top: 50%;
+            left: 10%;
+            transform: translateY(-50%);
+            color: #1565c0;
+        }
+
+        .label-right-cheek {
+            top: 50%;
+            right: 10%;
+            transform: translateY(-50%);
+            color: #1565c0;
+        }
+
+        .label-jawline {
+            bottom: 20%;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #2e7d32;
+        }
+
+        .skin-zones {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .zone-card {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .zone-card:hover {
+            transform: translateY(-5px);
+            border-color: #e83e8c;
+            box-shadow: 0 10px 25px rgba(232, 62, 140, 0.2);
+        }
+
+        .zone-icon {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            color: #e83e8c;
+        }
+
+        .zone-card h4 {
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+            color: #2c3e50;
+            font-weight: 600;
+        }
+
+        .zone-card p {
+            color: #666;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+
+        .action-section {
+            text-align: center;
+            margin-top: 40px;
+            width: 100%;
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            background: linear-gradient(135deg, #e83e8c, #6a11cb);
+            color: white;
+            border: none;
+            padding: 18px 45px;
+            border-radius: 50px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.5s ease;
+            text-decoration: none;
+            font-size: 1.3rem;
+            box-shadow: 
+                0 12px 30px rgba(232, 62, 140, 0.4),
+                inset 0 2px 0 rgba(255,255,255,0.3);
+            position: relative;
+            overflow: hidden;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .back-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.6s;
+        }
+
+        .back-btn:hover::before {
+            left: 100%;
+        }
+
+        .back-btn:hover {
+            transform: translateY(-4px);
+            box-shadow: 
+                0 16px 35px rgba(232, 62, 140, 0.6),
+                inset 0 2px 0 rgba(255,255,255,0.4);
+            background: linear-gradient(135deg, #6a11cb, #e83e8c);
+        }
+
+        .back-btn i {
+            margin-right: 15px;
+            font-size: 1.4rem;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+        }
+
+        .floating-element {
+            position: absolute;
+            border-radius: 50%;
+            z-index: 1;
+            opacity: 0.5;
+            filter: blur(50px);
+        }
+
+        .floating-1 {
+            width: 350px;
+            height: 350px;
+            background: radial-gradient(circle, rgba(232, 62, 140, 0.2) 0%, transparent 70%);
+            top: 5%;
+            left: 3%;
+            animation: float 15s ease-in-out infinite;
+        }
+
+        .floating-2 {
+            width: 280px;
+            height: 280px;
+            background: radial-gradient(circle, rgba(106, 17, 203, 0.2) 0%, transparent 70%);
+            bottom: 10%;
+            right: 5%;
+            animation: float 12s ease-in-out infinite reverse;
+        }
+
+        .floating-3 {
+            width: 220px;
+            height: 220px;
+            background: radial-gradient(circle, rgba(37, 117, 252, 0.2) 0%, transparent 70%);
+            top: 65%;
+            left: 8%;
+            animation: float 18s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg) scale(1);
+            }
+            33% {
+                transform: translateY(-40px) rotate(120deg) scale(1.1);
+            }
+            66% {
+                transform: translateY(25px) rotate(240deg) scale(0.95);
+            }
+        }
+
+        @keyframes glow {
+            0% {
+                text-shadow: 0 0 25px rgba(232, 62, 140, 0.7);
+                transform: scale(1);
+            }
+            100% {
+                text-shadow: 0 0 35px rgba(232, 62, 140, 0.9), 0 0 50px rgba(232, 62, 140, 0.5);
+                transform: scale(1.08);
+            }
+        }
+
+        @keyframes lineGlow {
+            0%, 100% {
+                opacity: 0.6;
+                transform: scaleX(0.7);
+            }
+            50% {
+                opacity: 1;
+                transform: scaleX(1);
+            }
+        }
+
+        @keyframes shimmer {
+            0%, 100% {
+                opacity: 0.4;
+            }
+            50% {
+                opacity: 0.7;
+            }
+        }
+
+        @keyframes zonePulse {
+            0%, 100% {
+                opacity: 0.4;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.7;
+                transform: scale(1.02);
+            }
+        }
+
+        @media (max-width: 968px) {
+            .instructions-container {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+            
+            .page-title {
+                font-size: 2.4rem;
+            }
+            
+            .logo h1 {
+                font-size: 2.8rem;
+            }
+            
+            .logo i {
+                font-size: 2.8rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .skin-zones {
+                grid-template-columns: 1fr;
+            }
+            
+            .step-item {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .step-item::before {
+                margin-right: 0;
+                margin-bottom: 15px;
+            }
+
+            .face-diagram {
+                width: 150px;
+                height: 180px;
+            }
+
+            .zone-label {
+                font-size: 0.7rem;
+                padding: 3px 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-element floating-1"></div>
+    <div class="floating-element floating-2"></div>
+    <div class="floating-element floating-3"></div>
+
+    <div class="container">
+        <div class="header">
+            <div class="logo">
+                <i class="fas fa-spa"></i>
+                <h1>GlowGuide</h1>
+            </div>
+            <h2 class="page-title">Skin Type Test Instructions</h2>
+            <p class="subtitle">Follow these simple steps to accurately determine your skin type and get the most personalized recommendations</p>
+        </div>
+
+        <div class="instructions-container">
+            <div class="steps-section">
+                <h3><i class="fas fa-list-ol"></i> Step-by-Step Guide</h3>
+                <ul class="steps-list">
+                    <li class="step-item">
+                        <div class="step-content">
+                            <h4>Clean Your Face</h4>
+                            <p>Gently wash your face with a mild cleanser and pat dry with a soft towel. Avoid rubbing your skin.</p>
+                        </div>
+                    </li>
+                    <li class="step-item">
+                        <div class="step-content">
+                            <h4>Wait Patiently</h4>
+                            <p>Wait exactly one hour without applying any skincare products, makeup, or touching your face.</p>
+                        </div>
+                    </li>
+                    <li class="step-item">
+                        <div class="step-content">
+                            <h4>Observe Carefully</h4>
+                            <p>Examine your skin in good lighting. Check for oiliness, dryness, or combination areas.</p>
+                        </div>
+                    </li>
+                    <li class="step-item">
+                        <div class="step-content">
+                            <h4>Blot Test (Optional)</h4>
+                            <p>Gently press a tissue on different areas of your face to check for oil absorption patterns.</p>
+                        </div>
+                    </li>
+                    <li class="step-item">
+                        <div class="step-content">
+                            <h4>Record Your Findings</h4>
+                            <p>Note which areas are oily, dry, or normal. This will help you select the correct skin type.</p>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="visual-section">
+                <h3><i class="fas fa-eye"></i> Skin Zone Analysis</h3>
+                <div class="skin-visual">
+                    <div class="face-diagram">
+                        <div class="face-outline">
+                            <div class="t-zone"></div>
+                            <div class="cheeks">
+                                <div class="cheek-left"></div>
+                                <div class="cheek-right"></div>
+                            </div>
+                            <div class="jawline"></div>
+                            <div class="zone-labels">
+                                <div class="zone-label label-tzone">T-ZONE</div>
+                                <div class="zone-label label-left-cheek">CHEEKS</div>
+                                <div class="zone-label label-right-cheek">CHEEKS</div>
+                                <div class="zone-label label-jawline">JAWLINE</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="skin-zones">
+                    <div class="zone-card">
+                        <div class="zone-icon">
+                            <i class="fas fa-tint"></i>
+                        </div>
+                        <h4>T-Zone</h4>
+                        <p>Forehead, nose, and chin. Often oily in combination skin</p>
+                    </div>
+                    <div class="zone-card">
+                        <div class="zone-icon">
+                            <i class="fas fa-leaf"></i>
+                        </div>
+                        <h4>Cheeks</h4>
+                        <p>Usually normal to dry. Watch for flakiness or tightness</p>
+                    </div>
+                    <div class="zone-card">
+                        <div class="zone-icon">
+                            <i class="fas fa-expand"></i>
+                        </div>
+                        <h4>Jawline</h4>
+                        <p>Check for breakouts or dryness along the jaw area</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="action-section">
+            <a href="{{ url_for('skin_type') }}" class="back-btn">
+                <i class="fas fa-arrow-left"></i> Back to Skin Type Selection
+            </a>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const stepItems = document.querySelectorAll('.step-item');
+            stepItems.forEach(item => {
+                item.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-8px)';
+                    this.style.boxShadow = '0 15px 30px rgba(0,0,0,0.15)';
+                });
+                
+                item.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0)';
+                    this.style.boxShadow = '0 5px 15px rgba(0,0,0,0.05)';
+                });
+            });
+
+            const backBtn = document.querySelector('.back-btn');
+            backBtn.addEventListener('click', function(e) {
+                const ripple = document.createElement('span');
+                const rect = this.getBoundingClientRect();
+                const size = Math.max(rect.width, rect.height);
+                const x = e.clientX - rect.left - size/2;
+                const y = e.clientY - rect.top - size/2;
+                
+                ripple.style.width = ripple.style.height = size + 'px';
+                ripple.style.left = x + 'px';
+                ripple.style.top = y + 'px';
+                ripple.classList.add('ripple');
+                
+                this.appendChild(ripple);
+                
+                setTimeout(() => {
+                    ripple.remove();
+                }, 800);
+            });
+        });
+
+        const style = document.createElement('style');
+        style.textContent = `
+            .back-btn {
+                position: relative;
+                overflow: hidden;
+            }
+            .ripple {
+                position: absolute;
+                border-radius: 50%;
+                background: rgba(255, 255, 255, 0.7);
+                transform: scale(0);
+                animation: ripple-animation 0.8s linear;
+            }
+            @keyframes ripple-animation {
+                to {
+                    transform: scale(4);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>

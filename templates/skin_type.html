@@ -1,0 +1,337 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discover Your Skin Type | GlowGuide</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #fdfcfb 0%, #f5e3e6 50%, #e2f0fb 100%);
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+            width: 100%;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 25px;
+        }
+
+        .logo i {
+            font-size: 3.2rem;
+            color: #e83e8c;
+            margin-right: 18px;
+        }
+
+        .logo h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            background: linear-gradient(45deg, #e83e8c, #6a11cb, #2575fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 1.2px;
+        }
+
+        .page-title {
+            font-size: 3rem;
+            margin: 30px 0 20px;
+            font-weight: 700;
+            position: relative;
+            display: inline-block;
+            background: linear-gradient(45deg, #2c3e50, #e83e8c, #3498db);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .page-title::after {
+            content: '';
+            position: absolute;
+            width: 70%;
+            height: 5px;
+            background: linear-gradient(90deg, transparent, #e83e8c, #6a11cb, transparent);
+            bottom: -18px;
+            left: 15%;
+            border-radius: 3px;
+        }
+
+        .subtitle {
+            font-size: 1.4rem;
+            color: #666;
+            max-width: 700px;
+            margin: 30px auto 0;
+            line-height: 1.7;
+            font-weight: 500;
+        }
+
+        .skin-type-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 35px;
+            width: 100%;
+            max-width: 1200px;
+            margin: 50px 0;
+        }
+
+        .skin-type-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 25px;
+            padding: 45px 35px;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+            border: 2px solid transparent;
+        }
+
+        .skin-type-card h3 {
+            font-size: 2rem;
+            margin-bottom: 25px;
+            color: #2c3e50;
+            font-weight: 700;
+        }
+
+        .skin-type-card p {
+            color: #666;
+            font-size: 1.2rem;
+            margin-bottom: 35px;
+            line-height: 1.7;
+            font-weight: 500;
+        }
+
+        .skin-type-btn {
+            background: linear-gradient(135deg, #e83e8c, #6a11cb);
+            color: white;
+            border: none;
+            padding: 18px 40px;
+            border-radius: 50px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(232, 62, 140, 0.3);
+            width: 100%;
+            font-size: 1.2rem;
+            letter-spacing: 0.8px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .skin-type-btn:hover {
+            box-shadow: 0 12px 30px rgba(232, 62, 140, 0.4);
+            background: linear-gradient(135deg, #6a11cb, #e83e8c);
+        }
+
+        .skin-test-section {
+            background: linear-gradient(135deg, rgba(255,255,255,0.95), rgba(245, 245, 255, 0.95));
+            border-radius: 25px;
+            padding: 40px;
+            text-align: center;
+            margin-top: 40px;
+            width: 100%;
+            max-width: 800px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+            border: 1px solid rgba(232, 62, 140, 0.1);
+        }
+
+        .skin-test-section h3 {
+            font-size: 2.2rem;
+            margin-bottom: 20px;
+            color: #2c3e50;
+            font-weight: 700;
+            background: linear-gradient(45deg, #e83e8c, #6a11cb);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .skin-test-section p {
+            font-size: 1.3rem;
+            color: #666;
+            margin-bottom: 30px;
+            line-height: 1.6;
+            font-weight: 500;
+        }
+
+        .test-btn {
+            display: inline-flex;
+            align-items: center;
+            background: linear-gradient(135deg, #2575fc, #6a11cb);
+            color: white;
+            border: none;
+            padding: 18px 45px;
+            border-radius: 50px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            font-size: 1.3rem;
+            box-shadow: 0 8px 25px rgba(37, 117, 252, 0.3);
+            position: relative;
+            overflow: hidden;
+            letter-spacing: 1px;
+        }
+
+        .test-btn:hover {
+            box-shadow: 0 12px 30px rgba(37, 117, 252, 0.4);
+            background: linear-gradient(135deg, #6a11cb, #2575fc);
+        }
+
+        @media (max-width: 768px) {
+            .skin-type-grid {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+            
+            .page-title {
+                font-size: 2.4rem;
+            }
+            
+            .logo h1 {
+                font-size: 2.8rem;
+            }
+            
+            .logo i {
+                font-size: 2.8rem;
+            }
+            
+            .skin-test-section {
+                padding: 30px 25px;
+            }
+            
+            .skin-test-section h3 {
+                font-size: 1.8rem;
+            }
+            
+            .test-btn {
+                padding: 16px 35px;
+                font-size: 1.1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">
+                <i class="fas fa-spa"></i>
+                <h1>GlowGuide</h1>
+            </div>
+            <h2 class="page-title">Discover Your Skin Type</h2>
+            <p class="subtitle">Select your skin type to unlock personalized cosmetic recommendations with our AI-powered beauty assistant</p>
+        </div>
+
+        <form action="{{ url_for('budget') }}" method="post" class="skin-type-form">
+            <div class="skin-type-grid">
+                <div class="skin-type-card">
+                    <h3>Dry Skin</h3>
+                    <p>Skin that feels tight, may have flaky patches, and needs extra hydration and nourishment</p>
+                    <button type="submit" name="skin_type" value="dry" class="skin-type-btn">
+                        Select Dry Skin
+                    </button>
+                </div>
+
+                <div class="skin-type-card">
+                    <h3>Oily Skin</h3>
+                    <p>Shiny appearance, enlarged pores, prone to blackheads and breakouts. Needs oil control</p>
+                    <button type="submit" name="skin_type" value="oily" class="skin-type-btn">
+                        Select Oily Skin
+                    </button>
+                </div>
+
+                <div class="skin-type-card">
+                    <h3>Combination</h3>
+                    <p>Oily in T-zone (forehead, nose, chin) and dry or normal on cheeks. Balanced care needed</p>
+                    <button type="submit" name="skin_type" value="combination" class="skin-type-btn">
+                        Select Combination
+                    </button>
+                </div>
+            </div>
+        </form>
+
+        <div class="skin-test-section">
+            <div class="skin-test-content">
+                <h3>Not Sure About Your Skin Type?</h3>
+                <p>Take our quick 2-minute skin analysis test to discover your perfect skin type and get personalized recommendations</p>
+                <a href="{{ url_for('skin_test') }}" class="test-btn">
+                    Start Skin Analysis
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const buttons = document.querySelectorAll('.skin-type-btn, .test-btn');
+            buttons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    const ripple = document.createElement('span');
+                    const rect = this.getBoundingClientRect();
+                    const size = Math.max(rect.width, rect.height);
+                    const x = e.clientX - rect.left - size/2;
+                    const y = e.clientY - rect.top - size/2;
+                    
+                    ripple.style.width = ripple.style.height = size + 'px';
+                    ripple.style.left = x + 'px';
+                    ripple.style.top = y + 'px';
+                    ripple.classList.add('ripple');
+                    
+                    this.appendChild(ripple);
+                    
+                    setTimeout(() => {
+                        ripple.remove();
+                    }, 800);
+                });
+            });
+        });
+
+        const style = document.createElement('style');
+        style.textContent = `
+            .skin-type-btn, .test-btn {
+                position: relative;
+                overflow: hidden;
+            }
+            .ripple {
+                position: absolute;
+                border-radius: 50%;
+                background: rgba(255, 255, 255, 0.7);
+                transform: scale(0);
+                animation: ripple-animation 0.8s linear;
+            }
+            @keyframes ripple-animation {
+                to {
+                    transform: scale(4);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>

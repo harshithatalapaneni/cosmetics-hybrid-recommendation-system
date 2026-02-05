@@ -1,0 +1,297 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Subcategory | GlowGuide</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #fdfcfb 0%, #f5e3e6 50%, #e2f0fb 100%);
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+            width: 100%;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 25px;
+        }
+
+        .logo i {
+            font-size: 3.2rem;
+            color: #e83e8c;
+            margin-right: 18px;
+        }
+
+        .logo h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            background: linear-gradient(45deg, #e83e8c, #6a11cb, #2575fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 1.2px;
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            margin: 30px 0 15px;
+            font-weight: 700;
+            position: relative;
+            display: inline-block;
+            background: linear-gradient(45deg, #2c3e50, #e83e8c, #3498db);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .category-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #e83e8c, #6a11cb);
+            color: white;
+            padding: 10px 25px;
+            border-radius: 25px;
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin: 15px 0 30px;
+            box-shadow: 0 8px 20px rgba(232, 62, 140, 0.3);
+        }
+
+        .subtitle {
+            font-size: 1.3rem;
+            color: #666;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.7;
+            font-weight: 500;
+        }
+
+        .subcategories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            width: 100%;
+            max-width: 1100px;
+            margin: 40px 0;
+        }
+
+        .subcategory-btn {
+            background: rgba(255, 255, 255, 0.95);
+            border: 2px solid #e83e8c;
+            padding: 30px 20px;
+            border-radius: 15px;
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #2c3e50;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 120px;
+        }
+
+        .subcategory-btn:hover {
+            background: rgba(232, 62, 140, 0.05);
+            border-color: #6a11cb;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.12);
+        }
+
+        .subcategory-name {
+            font-size: 1.4rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, #e83e8c, #6a11cb);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-transform: capitalize;
+        }
+
+        .skip-section {
+            text-align: center;
+            margin-top: 50px;
+            width: 100%;
+        }
+
+        .skip-btn {
+            display: inline-flex;
+            align-items: center;
+            background: transparent;
+            color: #666;
+            border: 2px solid #ddd;
+            padding: 16px 40px;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            font-size: 1.2rem;
+        }
+
+        .skip-btn:hover {
+            background: rgba(255, 255, 255, 0.8);
+            border-color: #e83e8c;
+            color: #e83e8c;
+        }
+
+        .skip-btn i {
+            margin-right: 12px;
+            transition: transform 0.3s ease;
+        }
+
+        .skip-btn:hover i {
+            transform: translateX(5px);
+        }
+
+        @media (max-width: 768px) {
+            .subcategories-grid {
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                gap: 15px;
+            }
+            
+            .page-title {
+                font-size: 2rem;
+            }
+            
+            .logo h1 {
+                font-size: 2.8rem;
+            }
+            
+            .logo i {
+                font-size: 2.8rem;
+            }
+            
+            .subcategory-btn {
+                padding: 25px 15px;
+                min-height: 100px;
+            }
+            
+            .subcategory-name {
+                font-size: 1.2rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .subcategories-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">
+                <i class="fas fa-spa"></i>
+                <h1>GlowGuide</h1>
+            </div>
+            <h2 class="page-title">Select Subcategory</h2>
+            <div class="category-badge">
+                {{ main_category }}
+            </div>
+            <p class="subtitle">Choose a specific subcategory to refine your product recommendations</p>
+        </div>
+
+        <form action="{{ url_for('liked_products') }}" method="post">
+            <input type="hidden" name="skin_type" value="{{ skin_type }}">
+            <input type="hidden" name="budget" value="{{ budget }}">
+            <input type="hidden" name="main_category" value="{{ main_category }}">
+            
+            <div class="subcategories-grid">
+                {% for sub_cat in subcategories %}
+                <button type="submit" name="sub_category" value="{{ sub_cat }}" class="subcategory-btn">
+                    <span class="subcategory-name">{{ sub_cat }}</span>
+                </button>
+                {% endfor %}
+            </div>
+
+            <div class="skip-section">
+                <button type="submit" name="sub_category" value="" class="skip-btn">
+                    <i class="fas fa-forward"></i> Skip Subcategory Selection
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const buttons = document.querySelectorAll('.subcategory-btn, .skip-btn');
+            buttons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    const ripple = document.createElement('span');
+                    const rect = this.getBoundingClientRect();
+                    const size = Math.max(rect.width, rect.height);
+                    const x = e.clientX - rect.left - size/2;
+                    const y = e.clientY - rect.top - size/2;
+                    
+                    ripple.style.width = ripple.style.height = size + 'px';
+                    ripple.style.left = x + 'px';
+                    ripple.style.top = y + 'px';
+                    ripple.classList.add('ripple');
+                    
+                    this.appendChild(ripple);
+                    
+                    setTimeout(() => {
+                        ripple.remove();
+                    }, 600);
+                });
+            });
+        });
+
+        const style = document.createElement('style');
+        style.textContent = `
+            .subcategory-btn, .skip-btn {
+                position: relative;
+                overflow: hidden;
+            }
+            .ripple {
+                position: absolute;
+                border-radius: 50%;
+                background: rgba(232, 62, 140, 0.2);
+                transform: scale(0);
+                animation: ripple-animation 0.6s linear;
+            }
+            @keyframes ripple-animation {
+                to {
+                    transform: scale(4);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>

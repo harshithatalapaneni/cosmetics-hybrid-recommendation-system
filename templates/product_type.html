@@ -1,0 +1,329 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Product Type | GlowGuide</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #fdfcfb 0%, #f5e3e6 50%, #e2f0fb 100%);
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+            width: 100%;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 25px;
+        }
+
+        .logo i {
+            font-size: 3.2rem;
+            color: #e83e8c;
+            margin-right: 18px;
+        }
+
+        .logo h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            background: linear-gradient(45deg, #e83e8c, #6a11cb, #2575fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 1.2px;
+        }
+
+        .page-title {
+            font-size: 3rem;
+            margin: 30px 0 20px;
+            font-weight: 700;
+            position: relative;
+            display: inline-block;
+            background: linear-gradient(45deg, #2c3e50, #e83e8c, #3498db);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .page-title::after {
+            content: '';
+            position: absolute;
+            width: 70%;
+            height: 5px;
+            background: linear-gradient(90deg, transparent, #e83e8c, #6a11cb, transparent);
+            bottom: -18px;
+            left: 15%;
+            border-radius: 3px;
+        }
+
+        .subtitle {
+            font-size: 1.4rem;
+            color: #666;
+            max-width: 600px;
+            margin: 30px auto 0;
+            line-height: 1.7;
+            font-weight: 500;
+        }
+
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            width: 100%;
+            max-width: 1100px;
+            margin: 40px 0;
+        }
+
+        .category-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 40px 30px;
+            text-align: center;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 250px;
+        }
+
+        .category-card:hover {
+            box-shadow: 0 20px 45px rgba(0,0,0,0.12);
+            border-color: rgba(232, 62, 140, 0.2);
+        }
+
+        .category-name {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            background: linear-gradient(45deg, #e83e8c, #6a11cb);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-transform: capitalize;
+        }
+
+        .category-description {
+            font-size: 1.1rem;
+            color: #666;
+            margin-bottom: 25px;
+            line-height: 1.6;
+            font-weight: 500;
+            flex-grow: 1;
+        }
+
+        .category-btn {
+            background: linear-gradient(135deg, #e83e8c, #6a11cb);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 20px rgba(232, 62, 140, 0.3);
+            font-size: 1.1rem;
+            letter-spacing: 0.8px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .category-btn:hover {
+            box-shadow: 0 12px 25px rgba(232, 62, 140, 0.4);
+            background: linear-gradient(135deg, #6a11cb, #e83e8c);
+        }
+
+        .skip-section {
+            text-align: center;
+            margin-top: 40px;
+            width: 100%;
+        }
+
+        .skip-btn {
+            display: inline-flex;
+            align-items: center;
+            background: transparent;
+            color: #666;
+            border: 2px solid #ddd;
+            padding: 16px 40px;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            font-size: 1.2rem;
+        }
+
+        .skip-btn:hover {
+            background: rgba(255, 255, 255, 0.8);
+            border-color: #e83e8c;
+            color: #e83e8c;
+        }
+
+        .skip-btn i {
+            margin-right: 12px;
+            transition: transform 0.3s ease;
+        }
+
+        .skip-btn:hover i {
+            transform: translateX(5px);
+        }
+
+        @media (max-width: 768px) {
+            .categories-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .page-title {
+                font-size: 2.4rem;
+            }
+            
+            .logo h1 {
+                font-size: 2.8rem;
+            }
+            
+            .logo i {
+                font-size: 2.8rem;
+            }
+            
+            .category-name {
+                font-size: 1.6rem;
+            }
+            
+            .category-card {
+                padding: 30px 25px;
+                min-height: 220px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">
+                <i class="fas fa-spa"></i>
+                <h1>GlowGuide</h1>
+            </div>
+            <h2 class="page-title">Select Product Type</h2>
+            <p class="subtitle">Choose your preferred product category to discover personalized recommendations</p>
+        </div>
+
+        <form action="{{ url_for('sub_category') }}" method="post">
+            <input type="hidden" name="skin_type" value="{{ skin_type }}">
+            <input type="hidden" name="budget" value="{{ budget }}">
+            
+            <div class="categories-grid">
+                {% for cat in categories %}
+                <div class="category-card">
+                    <div>
+                        <div class="category-name">{{ cat }}</div>
+                        {% if 'skin' in cat.lower() or 'face' in cat.lower() %}
+                        <div class="category-description"></div>
+                        {% elif 'makeup' in cat.lower() or 'cosmetic' in cat.lower() %}
+                        <div class="category-description"></div>
+                        {% elif 'hair' in cat.lower() %}
+                        <div class="category-description">Hair care and styling products for beautiful, healthy hair</div>
+                        {% elif 'body' in cat.lower() %}
+                        <div class="category-description">Body care and moisturizing products for soft, nourished skin</div>
+                        {% elif 'fragrance' in cat.lower() or 'perfume' in cat.lower() %}
+                        <div class="category-description">Scents and fragrance collections to express your unique style</div>
+                        {% elif 'bath' in cat.lower() %}
+                        <div class="category-description">Bath and shower essentials for a relaxing self-care experience</div>
+                        {% else %}
+                        <div class="category-description">Discover amazing products tailored to your preferences in this category</div>
+                        {% endif %}
+                    </div>
+                    <button type="submit" name="main_category" value="{{ cat }}" class="category-btn">
+                        Select Category
+                    </button>
+                </div>
+                {% endfor %}
+            </div>
+
+            <div class="skip-section">
+                <button type="submit" name="main_category" value="" class="skip-btn">
+                    <i class="fas fa-forward"></i> Skip Category Selection
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const buttons = document.querySelectorAll('.category-btn, .skip-btn');
+            buttons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    const ripple = document.createElement('span');
+                    const rect = this.getBoundingClientRect();
+                    const size = Math.max(rect.width, rect.height);
+                    const x = e.clientX - rect.left - size/2;
+                    const y = e.clientY - rect.top - size/2;
+                    
+                    ripple.style.width = ripple.style.height = size + 'px';
+                    ripple.style.left = x + 'px';
+                    ripple.style.top = y + 'px';
+                    ripple.classList.add('ripple');
+                    
+                    this.appendChild(ripple);
+                    
+                    setTimeout(() => {
+                        ripple.remove();
+                    }, 600);
+                });
+            });
+        });
+
+        const style = document.createElement('style');
+        style.textContent = `
+            .category-btn, .skip-btn {
+                position: relative;
+                overflow: hidden;
+            }
+            .ripple {
+                position: absolute;
+                border-radius: 50%;
+                background: rgba(255, 255, 255, 0.6);
+                transform: scale(0);
+                animation: ripple-animation 0.6s linear;
+            }
+            @keyframes ripple-animation {
+                to {
+                    transform: scale(4);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>

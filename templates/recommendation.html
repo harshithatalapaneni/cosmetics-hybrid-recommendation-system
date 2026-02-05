@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Personalized Skincare Recommendations</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #e83e8c;
+            --primary-light: #ff6ba8;
+            --secondary: #6a11cb;
+            --accent: #ff6b6b;
+            --accent-light: #ff9e9e;
+            --light: #fdf2f8;
+            --dark: #2c3e50;
+            --gray: #6c757d;
+            --success: #e83e8c;
+            --warning: #f39c12;
+            --card-shadow: 0 10px 30px rgba(232, 62, 140, 0.1);
+            --transition: all 0.3s ease;
+        }
+
+        body {
+            background: linear-gradient(135deg, #fdfcfb 0%, #f5e3e6 50%, #e2f0fb 100%);
+            color: var(--dark);
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .page-header h1 {
+            font-size: 2.5rem;
+            background: linear-gradient(45deg, #e83e8c, #6a11cb);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .page-header h1::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(90deg, #e83e8c, #6a11cb);
+            border-radius: 2px;
+        }
+
+        .page-subtitle {
+            color: var(--gray);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .user-context-card {
+            background: white;
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: var(--card-shadow);
+            border-left: 5px solid #e83e8c;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .user-context-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, #e83e8c, #6a11cb);
+        }
+
+        .user-context-card h3 {
+            color: #e83e8c;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .user-context-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .context-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .context-label {
+            font-size: 0.85rem;
+            color: var(--gray);
+            margin-bottom: 5px;
+        }
+
+        .context-value {
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .context-badge {
+            background: linear-gradient(45deg, #e83e8c, #6a11cb);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin-left: 10px;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .product-list {
+            list-style: none;
+            counter-reset: product-counter;
+        }
+
+        .product-item {
+            background: white;
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: var(--card-shadow);
+            position: relative;
+            transition: var(--transition);
+            border: 1px solid rgba(232, 62, 140, 0.1);
+        }
+
+        .product-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(232, 62, 140, 0.15);
+        }
+
+        .product-item::before {
+            counter-increment: product-counter;
+            content: counter(product-counter);
+            background: linear-gradient(135deg, #e83e8c, #6a11cb);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: absolute;
+            left: -15px;
+            top: 25px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            box-shadow: 0 5px 15px rgba(232, 62, 140, 0.3);
+        }
+
+        .product-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+
+        .product-name {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-right: 15px;
+            flex: 1;
+        }
+
+        .product-details {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(232, 62, 140, 0.1);
+        }
+
+        .detail-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .detail-label {
+            font-size: 0.8rem;
+            color: var(--gray);
+            margin-bottom: 3px;
+        }
+
+        .detail-value {
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .price {
+            color: #e83e8c;
+            font-weight: 700;
+        }
+
+        .score {
+            color: #6a11cb;
+        }
+
+        .explain-box {
+            margin-top: 15px;
+            padding: 20px;
+            background: linear-gradient(135deg, #f8fbff 0%, #f0f7ff 100%);
+            border-radius: 12px;
+            border-left: 4px solid #6a11cb;
+            position: relative;
+        }
+
+        .explain-box::before {
+            content: '💡';
+            position: absolute;
+            left: -12px;
+            top: -12px;
+            background: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            box-shadow: 0 3px 10px rgba(232, 62, 140, 0.2);
+        }
+
+        .explanation-points {
+            margin-bottom: 15px;
+        }
+
+        .explanation-point {
+            display: block;
+            margin-bottom: 10px;
+            padding-left: 15px;
+            position: relative;
+            line-height: 1.5;
+        }
+
+        .explanation-point::before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            color: #6a11cb;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        .explanation-header {
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: var(--dark);
+            font-size: 1.1em;
+        }
+
+        .keywords-container {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(106, 17, 203, 0.1);
+        }
+
+        .keywords-title {
+            font-size: 0.9rem;
+            color: var(--gray);
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .keyword-tag {
+            display: inline-block;
+            background: rgba(232, 62, 140, 0.1);
+            color: #e83e8c;
+            padding: 5px 12px;
+            margin: 0 8px 8px 0;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .keyword-tag:hover {
+            background: rgba(232, 62, 140, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .user-feedback {
+            margin-top: 15px;
+            padding: 15px;
+            background: white;
+            border-radius: 10px;
+            border-left: 3px solid var(--accent-light);
+            font-style: italic;
+            position: relative;
+        }
+
+        .user-feedback::before {
+            content: '"';
+            font-size: 3rem;
+            color: var(--accent-light);
+            position: absolute;
+            left: 10px;
+            top: -10px;
+            opacity: 0.5;
+        }
+
+        .loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            color: var(--gray);
+            font-style: italic;
+        }
+
+        .loading::after {
+            content: '';
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(232, 62, 140, 0.3);
+            border-top: 2px solid #e83e8c;
+            border-radius: 50%;
+            margin-left: 10px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 768px) {
+            .page-header h1 {
+                font-size: 2rem;
+            }
+            
+            .user-context-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .product-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .product-name {
+                margin-bottom: 10px;
+            }
+            
+            .product-item::before {
+                position: relative;
+                left: 0;
+                top: 0;
+                margin-bottom: 15px;
+                align-self: flex-start;
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .product-item {
+            animation: fadeInUp 0.5s ease forwards;
+            opacity: 0;
+        }
+
+        .product-item:nth-child(1) { animation-delay: 0.1s; }
+        .product-item:nth-child(2) { animation-delay: 0.2s; }
+        .product-item:nth-child(3) { animation-delay: 0.3s; }
+        .product-item:nth-child(4) { animation-delay: 0.4s; }
+        .product-item:nth-child(5) { animation-delay: 0.5s; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1>Your Personalized Recommendations</h1>
+            <p class="page-subtitle">Curated just for you based on your preferences and current conditions</p>
+        </header>
+        
+        <div class="user-context-card">
+            <h3><i class="fas fa-user-circle"></i> Your Preferences</h3>
+            <div class="user-context-grid">
+                <div class="context-item">
+                    <span class="context-label">Skin Type</span>
+                    <span class="context-value">{{ skin_type.title() if skin_type else 'Not specified' }}</span>
+                </div>
+                <div class="context-item">
+                    <span class="context-label">Budget</span>
+                    <span class="context-value">${{ budget if budget else 'Not specified' }}</span>
+                </div>
+                <div class="context-item">
+                    <span class="context-label">Category</span>
+                    <span class="context-value">{{ sub_category.title() if sub_category else 'Not specified' }}</span>
+                </div>
+                <div class="context-item">
+                    <span class="context-label">Brand Preference</span>
+                    <span class="context-value">{{ brand.title() if brand else 'Any brand' }}</span>
+                </div>
+                <div class="context-item">
+                    <span class="context-label">Location Context</span>
+                    <span class="context-value">
+                        {{ 'Enabled' if context_enabled else 'Disabled' }}
+                        {% if context_enabled %}
+                        <span class="context-badge"><i class="fas fa-cloud-sun"></i> Weather-Aware</span>
+                        {% endif %}
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <ol class="product-list">
+        {% for r in recommendations %}
+        <li class="product-item" data-product-id="{{ r.product_id }}" data-idx="{{ loop.index0 }}">
+            <div class="product-header">
+                <div class="product-name">
+                    {{ r.product_name }}
+                    {% if explanations and explanations[r.product_id] and explanations[r.product_id].boosts %}
+                        {% for boost in explanations[r.product_id].boosts %}
+                            {% if 'weather' in boost.lower() or 'temperature' in boost.lower() or 'hot' in boost.lower() or 'cold' in boost.lower() or 'humid' in boost.lower() or 'sunny' in boost.lower() %}
+                                <span class="context-badge"><i class="fas fa-cloud-sun"></i> Context-Aware</span>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+            <div class="product-details">
+                <div class="detail-item">
+                    <span class="detail-label">Brand</span>
+                    <span class="detail-value">{{ r.brand_name }}</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Price</span>
+                    <span class="detail-value price">${{ "%.2f"|format(r.price_usd) if r.price_usd else "N/A" }}</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Relevance Score</span>
+                    <span class="detail-value score">{{ r.score|round(4) }}</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Product ID</span>
+                    <span class="detail-value">{{ r.product_id }}</span>
+                </div>
+            </div>
+
+            {% if explanations and explanations[r.product_id] %}
+            <div class="explain-box">
+                <div class="explanation-points">
+                    {% if explanations[r.product_id].structured_boosts %}
+                        <div class="explanation-header">{{ r.product_name }} was recommended because:</div>
+                        {% for boost in explanations[r.product_id].structured_boosts %}
+                            <span class="explanation-point">{{ boost }}</span>
+                        {% endfor %}
+                    {% else %}
+                        {% set explanation_text = explanations[r.product_id].explanation %}
+                        {% if explanation_text %}
+                            {% set lines = explanation_text.split('\n') %}
+                            {% for line in lines %}
+                                {% if line and line.strip() %}
+                                    {% if loop.first and '<strong>' in line %}
+                                        <div class="explanation-header">{{ line|safe }}</div>
+                                    {% else %}
+                                        <span class="explanation-point">{{ line.replace('•', '').strip() }}</span>
+                                    {% endif %}
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}
+                    {% endif %}
+                </div>
+                
+                {% if explanations[r.product_id].keywords %}
+                <div class="keywords-container">
+                    <div class="keywords-title">Key Features:</div>
+                    {% for keyword in explanations[r.product_id].keywords %}
+                    <span class="keyword-tag">{{ keyword }}</span>
+                    {% endfor %}
+                </div>
+                {% endif %}
+                
+                {% if explanations[r.product_id].sample_positive_review %}
+                <div class="user-feedback">
+                    <strong>User Feedback:</strong> "{{ explanations[r.product_id].sample_positive_review }}"
+                </div>
+                {% endif %}
+            </div>
+            {% else %}
+            <div class="explain-box loading">
+                Loading explanation...
+            </div>
+            {% endif %}
+        </li>
+        {% endfor %}
+        </ol>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const contextBadges = document.querySelectorAll('.context-badge');
+            console.log(`Found ${contextBadges.length} context-aware recommendations`);
+            
+            const productItems = document.querySelectorAll('.product-item');
+            productItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    this.style.transform = 'scale(0.99)';
+                    setTimeout(() => {
+                        this.style.transform = '';
+                    }, 150);
+                });
+            });
+            
+            const scrollToTop = document.createElement('button');
+            scrollToTop.innerHTML = '<i class="fas fa-chevron-up"></i>';
+            scrollToTop.style.cssText = `
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                width: 50px;
+                height: 50px;
+                border-radius: 50%;
+                background: linear-gradient(135deg, #e83e8c, #6a11cb);
+                color: white;
+                border: none;
+                cursor: pointer;
+                box-shadow: 0 5px 15px rgba(232, 62, 140, 0.3);
+                display: none;
+                z-index: 100;
+                font-size: 1.2rem;
+                transition: var(--transition);
+            `;
+            document.body.appendChild(scrollToTop);
+            
+            scrollToTop.addEventListener('click', () => {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+            
+            window.addEventListener('scroll', () => {
+                if (window.pageYOffset > 300) {
+                    scrollToTop.style.display = 'flex';
+                    scrollToTop.style.alignItems = 'center';
+                    scrollToTop.style.justifyContent = 'center';
+                } else {
+                    scrollToTop.style.display = 'none';
+                }
+            });
+            
+            if (contextBadges.length > 0) {
+                console.log(`Found ${contextBadges.length} context-aware recommendations`);
+            }
+        });
+    </script>
+    
+
+</body>
+</html>
